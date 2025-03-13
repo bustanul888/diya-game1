@@ -81,7 +81,7 @@
     .paper:hover {
       border: 2px dashed lightseagreen;
     }
-    .scisor:hover {
+    .scissor:hover {
       border: 2px dashed violet;
     }
     .coice img {
@@ -146,23 +146,86 @@
       <div class="coice">
         <p>click your coice</p>
         <section>
-          <div class="rock"><img onclick="" src="img/rock.jpeg" alt="" /></div>
+          <div class="rock">
+            <img src="img/rock.jpeg" alt="" />
+          </div>
           <div class="paper"><img src="img/paper.jpeg" alt="" /></div>
-          <div class="scisor"><img src="img/scisor.jpeg" alt="" /></div>
+          <div class="scissor"><img src="img/scissor.jpeg" alt="" /></div>
         </section>
       </div>
       <div class="point">
         <div>
           <label for="player">players point</label>
-          <input id="player" type="number" disabled />
+          <input id="player-point" type="number" disabled />
         </div>
-        <button>reset</button>
+        <button onclick="resetScore()">reset</button>
         <div>
           <label for="computer">computers point</label>
-          <input id="computer" type="text" disabled />
+          <input id="computer-point" type="text" disabled />
         </div>
       </div>
     </div>
-    <script></script>
+    <script>
+      let playerInput = document.getElementById("player-input");
+      let computerInput = document.getElementById("computer-input");
+      let playerPoint = document.getElementById("player-point");
+      let computerPoint = document.getElementById("computer-point");
+      let totalPlayerPoint = 0;
+      let totalComputerPoint = 0;
+      const choices = ["rock", "paper", "scissor"];
+      const images = {
+        rock: "img/rock.jpeg",
+        paper: "img/paper.jpeg",
+        scissor: "img/scissor.jpeg",
+      };
+      let tags = document.querySelectorAll(".coice section div");
+      for (let i = 0; i < tags.length; i++) {
+        tags[i].addEventListener("click", function () {
+          let playerChoice = "";
+          if (this.classList.contains("rock")) {
+            playerChoice = "rock";
+          } else if (this.classList.contains("paper")) {
+            playerChoice = "paper";
+          } else if (this.classList.contains("scissor")) {
+            playerChoice = "scissor";
+          }
+          playerInput.src = images[playerChoice];
+          let randomIndex = Math.floor(Math.random() * choices.length);
+          let computerChoice = choices[randomIndex];
+          computerInput.src = images[computerChoice];
+          let winner = setWinner(playerChoice, computerChoice);
+          if (winner === "player") {
+            totalPlayerPoint += 1;
+          } else if (winner === "computer") {
+            totalComputerPoint += 1;
+          } else {
+            alert(winner);
+          }
+          console.log(totalPlayerPoint);
+          playerPoint.value = totalPlayerPoint;
+          computerPoint.value = totalComputerPoint;
+        });
+      }
+      function setWinner(player, computer) {
+        console.log(player);
+        console.log(computer);
+        if (player === computer) {
+          return "draw";
+        }
+        if (
+          (player === "scissor" && computer === "paper") ||
+          (player === "rock" && computer === "scissor") ||
+          (player === "paper" && computer === "rock")
+        ) {
+          return "player";
+        } else {
+          return "computer";
+        }
+      }
+      function resetScore() {
+        playerPoint.value = 0;
+        computerPoint.value = 0;
+      }
+    </script>
   </body>
 </html>
